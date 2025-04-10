@@ -2,13 +2,25 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const sequelize = require("./config/db");
-const profileRoutes = require("./routes/profileRoutes");
+const profileRoutes = require("./routes/profile");
 const UserProfile = require("./models/profile");
 
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// ✅ Allow only specific frontend URLs
+const allowedOrigins = [
+  "https://auth-client-cq65.onrender.com", // deployed frontend
+  "http://localhost:5173",            // local dev
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use("/api/profile", profileRoutes);
 
